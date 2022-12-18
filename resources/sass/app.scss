@@ -1,0 +1,45 @@
+// Variables
+@import "variables";
+@import "auth";
+
+// Bootstrap
+@import "bootstrap/scss/bootstrap";
+
+html * {
+    font-family: "Saira Condensed Medium", sans-serif;
+}
+
+a.text-primary:hover {
+    color: $cardBackground !important;
+}
+
+.header__container {
+    background: $cardBackground;
+    .navbar {
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+    }
+}
+
+.content__card {
+    opacity: $opacity;
+    background: $cardBackground;
+    // display: flex;
+    // flex-direction: row;
+
+    .content__edit {
+        margin-top: 1.5px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .header__container {
+        .navbar {
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+        }
+    }
+}

@@ -1,0 +1,42 @@
+.container__auth {
+    height: 100vh;
+
+    .login {
+        display: flex;
+        align-content: center;
+        height: 100%;
+
+        .login__card {
+            width: 450px;
+            opacity: $opacity;
+            background-color: $cardBackground;
+            border-radius: 20px;
+            margin: auto;
+
+            .login__input {
+                background-color: $background__button;
+                border: 1px solid transparent;
+                &::placeholder {
+                    color: #fff;
+                }
+            }
+
+            .invalid-feedback {
+                margin-bottom: 3px;
+            }
+
+            .login__submit {
+                padding: 8px 64px;
+            }
+        }
+    }
+}
+@media (max-width: 575.98px) {
+    .container__auth {
+        .login {
+            .login__card {
+                width: 100%;
+            }
+        }
+    }
+}
