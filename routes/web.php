@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SalesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
+    Route::get('/sales/{slug}', [SalesController::class, 'index'])->name('sales.index');
 
     Route::name('order.')->controller(OrderController::class)->group(function () {
         Route::get('/{shop}/{slug}', 'orderByStatus')->name('byStatus');

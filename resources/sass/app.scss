@@ -19,6 +19,9 @@ a.text-primary:hover {
         .navbar-brand {
             font-weight: bold;
             font-size: 1.5rem;
+            &:hover {
+                color: $primary !important;
+            }
         }
     }
 }
