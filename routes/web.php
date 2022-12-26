@@ -24,7 +24,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
-    Route::get('/sales/{slug}', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales/{slug?}', [SalesController::class, 'index'])->name('sales.index');
 
     Route::name('order.')->controller(OrderController::class)->group(function () {
         Route::get('/{shop}/{slug}', 'orderByStatus')->name('byStatus');
