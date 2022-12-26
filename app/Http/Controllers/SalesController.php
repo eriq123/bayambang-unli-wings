@@ -14,6 +14,12 @@ class SalesController extends Controller
 
         $status = Status::all();
         $orders = Order::all();
-        return view('admin.sales', compact('status', 'orders'));
+        $salesFilter = [
+            'daily',
+            'weekly',
+            'monthly',
+        ];
+
+        return view('admin.sales', compact('salesFilter', 'status', 'orders'));
     }
 }

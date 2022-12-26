@@ -18,22 +18,17 @@
                             @endforeach
                         </div>
                     </div>
+
                     <div class="col-12 col-lg-6 mt-4 mt-lg-0">
                         <h5>Sales</h5>
 
                         <div class="btn-group" role="group">
-                            <a href="/sales"
-                                class="btn {{ Request::route('slug') == 'daily' ? 'btn-primary text-dark' : 'btn-outline-primary' }}">
-                                Daily
-                            </a>
-                            <a href=""
-                                class="btn {{ Request::route('slug') == 'weekly' ? 'btn-primary text-dark' : 'btn-outline-primary' }}">
-                                Weekly
-                            </a>
-                            <a href=""
-                                class="btn {{ Request::route('slug') == 'monthly' ? 'btn-primary text-dark' : 'btn-outline-primary' }}">
-                                Monthly
-                            </a>
+                            @foreach ($salesFilter as $value)
+                                <a href="{{ route('sales.index', ['slug' => $value]) }}"
+                                    class="btn {{ Request::route('slug') == $value ? 'btn-primary text-dark' : 'btn-outline-primary' }}">
+                                    {{ Str::ucfirst($value) }}
+                                </a>
+                            @endforeach
                         </div>
                     </div>
                 </div>
