@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Order;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 
@@ -16,7 +17,7 @@ class OrderSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        Order::factory(10000)->create([
+        Order::factory(5000)->create([
             'total' => 0,
         ])
             ->each(function ($order) use ($faker) {
@@ -38,9 +39,12 @@ class OrderSeeder extends Seeder
                     );
                     $orderTotal += $total;
                 };
+                $randomTimeStamp = Carbon::today()->subDays(rand(0, 365));
 
                 $order = Order::find($order->id);
                 $order->total = $orderTotal;
+                $order->updated_at = $randomTimeStamp;
+                $order->created_at = $randomTimeStamp;
                 $order->save();
             });
     }

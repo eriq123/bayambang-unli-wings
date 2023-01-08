@@ -23,7 +23,6 @@ class OrderFactory extends Factory
     {
         $intArrCustomerIds = User::whereNull('role_id')->pluck('id');
         $intArrShopIds = Shop::all()->pluck('id');
-        $randomTimeStamp = Carbon::today()->subDays(rand(0, 365));
         $statusIds = Status::pluck('id');
 
         return [
@@ -31,8 +30,6 @@ class OrderFactory extends Factory
             'shop_id' => $this->faker->randomElement($intArrShopIds),
             'status_id' => $this->faker->randomElement($statusIds),
             'isActive' => 1,
-            'updated_at' => $randomTimeStamp,
-            'created_at' => $randomTimeStamp,
         ];
     }
 }
