@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <h1 class="mb-3">
                         Menu management
-                        <a class="mx-3 btn btn-outline-primary" href="{{ route('user.add') }}">
+                        <a class="mx-3 btn btn-outline-primary" href="{{ route('product.add') }}">
                             Add product
                         </a>
                     </h1>
@@ -28,6 +28,9 @@
                                 Update
                             </a>
                         </h2>
+                        <p class="mb-2">
+                            <b>Price:</b> PHP {{ $product->price }}
+                        </p>
                         <p class="mb-2">
                             <b>Description:</b> {{ $product->description }}
                         </p>

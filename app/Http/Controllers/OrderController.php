@@ -37,7 +37,6 @@ class OrderController extends Controller
         return redirect()->back()->withSuccess('Order has been updated successfully.');
     }
 
-
     public function destroy(Request $request)
     {
         $request->validate([

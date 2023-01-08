@@ -23,16 +23,16 @@ Route::post('/login', [AuthController::class, 'postLogin'])->name('login.post');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['web', 'auth'])->group(function () {
-    Route::get('/{slug?}', [HomeController::class, 'index'])->name('index');
-    Route::get('/sales/{slug?}', [SalesController::class, 'index'])->name('sales.index');
-
     Route::name('product.')->prefix('menu')->controller(ProductController::class)->group(function () {
         Route::get('/list', 'index')->name('index');
+        Route::get('/add', 'add')->name('add');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update', 'update')->name('update');
         Route::post('/destroy', 'destroy')->name('destroy');
     });
 
+    Route::get('/{slug?}', [HomeController::class, 'index'])->name('index');
+    Route::get('/sales/{slug?}', [SalesController::class, 'index'])->name('sales.index');
     Route::name('user.')->prefix('user')->controller(AuthController::class)->group(function () {
         Route::get('/', 'add')->name('add');
         Route::get('/edit/{id}', 'edit')->name('edit');
