@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\OrderController;
+use App\Http\Controllers\api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::name('order.')->controller(OrderController::class)->group(function () {
-    Route::post('/addToCart', 'addToCart');
-    Route::post('/view/orders', 'viewOrders');
-    Route::post('/checkout', 'checkout');
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::controller(AuthController::class)->group(function () {
+    Route::post('/login', 'login');
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('/logout', 'logout');
+    });
+
+    Route::controller(OrderController::class)->group(function () {
+        Route::post('/addToCart', 'addToCart');
+        Route::post('/view/orders', 'viewOrders');
+        Route::post('/checkout', 'checkout');
+    });
 });
