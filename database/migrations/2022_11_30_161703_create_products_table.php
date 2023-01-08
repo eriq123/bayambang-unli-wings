@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->integer('price');
             $table->foreignId('shop_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
         });
     }
