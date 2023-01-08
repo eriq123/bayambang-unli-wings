@@ -72,10 +72,11 @@
                                 </div>
                             @endif
                         </div>
-
-                        <div class="mb-3">
-                            <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" />
-                        </div>
+                        @if ($product->image)
+                            <div class="mb-3">
+                                <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" />
+                            </div>
+                        @endif
                     </div>
                     <div class="card-footer">
                         <div class="d-flex justify-content-between }}">
