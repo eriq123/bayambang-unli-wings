@@ -64,7 +64,6 @@ class OrderController extends Controller
         ]);
 
         $user = $request->user();
-        $product = Product::find($request->product_id);
         $statusInCart = Status::where('name', 'In Cart')->first();
 
         $order = Order::where('user_id', $user->id)
@@ -72,9 +71,10 @@ class OrderController extends Controller
             ->with('products')
             ->first();
 
-        $order->products()->detach($product->id);
+        $product = $order->products()->find($request->product_id);
 
-        $order->total -= $product->price * $product->quantity;
+        $order->products()->detach($product->id);
+        $order->total -= $product->price * $product->pivot->quantity;
         $order->save();
 
         $order = Order::with('products')->find($order->id);
