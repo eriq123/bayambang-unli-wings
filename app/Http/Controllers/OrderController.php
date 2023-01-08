@@ -100,7 +100,25 @@ class OrderController extends Controller
             $status = $status->where('name', '!=', 'Delivered');
         }
 
-        $orders = Order::where('user_id', $user->id)->whereIn('status_id', $status->pluck('id'))->with('products')->get();
+        $orders = Order::where('user_id', $user->id)
+            ->whereIn('status_id', $status->pluck('id'))
+            ->with('products')
+            ->get();
+
+        return response()->json(compact('orders'));
+    }
+
+    public function checkout(Request $request)
+    {
+        $request->validate([
+            'user_id' => ['required'],
+        ]);
+        $user = User::find($request->user_id);
+
+        $statusToBeProcessed = Status::where('name', 'To Be Process')->first();
+        $order = Order::where('user_id', $user->id)->where('isActive', 0)->first();
+        $order->status_id = $statusToBeProcessed;
+        $order->save();
 
         return response()->json(compact('orders'));
     }
