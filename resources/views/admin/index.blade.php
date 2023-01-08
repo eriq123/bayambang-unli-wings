@@ -42,7 +42,7 @@
                     <ul class="mt-3">
                         @foreach ($order->products as $product)
                             <li>
-                                {{ $product->pivot->quantity }} x {{ $product->title }}
+                                {{ $product->pivot->quantity }} x {{ $product->name }}
                             </li>
                         @endforeach
                     </ul>

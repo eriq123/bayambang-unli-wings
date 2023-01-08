@@ -25,7 +25,12 @@ class OrderSeeder extends Seeder
 
                 foreach (range(1, rand(2, 10)) as $item) {
                     $quantity = $faker->numberBetween(1, 10);
-                    $productId = $faker->randomElement(Product::pluck('id'));
+                    $products = Product::where('shop_id', $order->shop_id)->pluck('id');
+                    $orderExistingProducts = $order->products()->pluck('product_id');
+                    $products = array_diff($products->toArray(), $orderExistingProducts->toArray());
+                    if (count($products) == 0) return;
+
+                    $productId = $faker->randomElement($products);
                     $product = Product::find($productId);
                     $total = $quantity * $product->price;
 
