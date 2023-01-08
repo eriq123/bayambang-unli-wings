@@ -48,6 +48,9 @@ class ProductController extends Controller
         $product->price = $request->price;
 
         if ($request->hasFile('image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
             $file = $request->file('image');
             $path = 'images/' . $product->id;
             $path = Storage::disk('public')->put($path, $file);
