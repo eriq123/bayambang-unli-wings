@@ -26,6 +26,13 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/sales/{slug?}', [SalesController::class, 'index'])->name('sales.index');
 
+    Route::name('user.')->prefix('user')->controller(AuthController::class)->group(function () {
+        Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::post('/update', 'update')->name('update');
+        Route::post('/destroy', 'destroy')->name('destroy');
+    });
+
+
     Route::name('order.')->controller(OrderController::class)->group(function () {
         Route::get('/{shop}/{slug}', 'orderByStatus')->name('byStatus');
 

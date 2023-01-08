@@ -28,7 +28,7 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'status_id' => ['required'],
+            'status_id' => 'required',
         ]);
         $order = Order::findOrFail($id);
         $order->status_id = $request->status_id;
@@ -41,7 +41,7 @@ class OrderController extends Controller
     public function destroy(Request $request)
     {
         $request->validate([
-            'id' => ['required'],
+            'id' => 'required',
         ]);
         $order = Order::findOrFail($request->id);
         $order->delete();

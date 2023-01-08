@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\Shop;
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -12,11 +13,12 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $userRole = Role::find($user->role_id);
-        $status = Status::find(1);
-        $shop = Shop::find($user->shop_id);
+        $role = Role::where('name', 'Admin')->first();
 
-        if ($userRole->name == 'Admin') {
+        if ($user->role_id == $role->id) {
+            $status = Status::find(1);
+            $shop = Shop::find($user->shop_id);
+
             return redirect(
                 route('order.byStatus', [
                     'shop' => $shop->slug,
@@ -25,6 +27,7 @@ class HomeController extends Controller
             );
         }
 
-        return view('index');
+        $admins = User::where('role_id', $role->id)->with('shop')->get();
+        return view('index', compact('admins'));
     }
 }
