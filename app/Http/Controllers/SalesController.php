@@ -31,6 +31,7 @@ class SalesController extends Controller
         return
             Order::where('shop_id', Auth::user()->shop_id)
             ->where('status_id', $deliveredId)
+            ->where('isActive', 1)
             ->orderBy('updated_at')
             ->get()
             ->groupBy(function ($value) use ($slugKey) {

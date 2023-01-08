@@ -17,6 +17,7 @@ class OrderController extends Controller
         $orders = Order::with(['products', 'status', 'user', 'shop'])
             ->where('shop_id', $shop->id)
             ->where('status_id', $status->id)
+            ->where('isActive', 1)
             ->get();
 
         $status = Status::all();

@@ -30,6 +30,7 @@ class OrderFactory extends Factory
             'user_id' => $this->faker->randomElement($intArrCustomerIds),
             'shop_id' => $this->faker->randomElement($intArrShopIds),
             'status_id' => $this->faker->randomElement($statusIds),
+            'isActive' => 1,
             'updated_at' => $randomTimeStamp,
             'created_at' => $randomTimeStamp,
         ];
