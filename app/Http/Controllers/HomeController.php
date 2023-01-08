@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index($slug = null)
     {
         $user = Auth::user();
         $role = Role::where('name', 'Admin')->first();
@@ -27,7 +27,22 @@ class HomeController extends Controller
             );
         }
 
-        $admins = User::with(['shop', 'role'])->whereNotNull('role_id')->get();
-        return view('index', compact('admins'));
+        $rolesFilter = [
+            'admins',
+            'users',
+        ];
+        if ($slug === null) return redirect('/admins');
+        $users = $this->getUserByType($slug);
+
+        return view('index', compact('users', 'rolesFilter'));
+    }
+
+    private function getUserByType($type)
+    {
+        $user = User::with(['shop', 'role'])->whereNull('role_id')->get();
+        if ($type == 'admins') {
+            $user = User::with(['shop', 'role'])->whereNotNull('role_id')->get();
+        }
+        return $user;
     }
 }

@@ -23,7 +23,7 @@ Route::post('/login', [AuthController::class, 'postLogin'])->name('login.post');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['web', 'auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('index');
+    Route::get('/{slug?}', [HomeController::class, 'index'])->name('index');
     Route::get('/sales/{slug?}', [SalesController::class, 'index'])->name('sales.index');
 
     Route::name('user.')->prefix('user')->controller(AuthController::class)->group(function () {
