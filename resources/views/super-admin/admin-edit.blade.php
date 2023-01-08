@@ -47,35 +47,39 @@
                             @endif
                         </div>
 
-                        <div class="mb-3">
-                            <label for="shop_id" class="form-label">Shop</label>
-                            <select class="form-select mb-1 text-primary bg-transparent" name='shop_id'>
-                                @foreach ($shops as $value)
-                                    <option value="{{ $value->id }}" class="text-dark"
-                                        {{ isset($user) ? ($value->id == $user->shop_id ? 'selected' : '') : '' }}>
-                                        {{ $value->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" name="password"
-                                class="form-control bg-transparent {{ $errors->has('password') ? 'is-invalid' : '' }}"
-                                placeholder="Password">
-                            @if ($errors->has('password'))
-                                <div class="invalid-feedback mt-0">
-                                    {{ $errors->first('password') }}
+                        @if (!isset($user) || (isset($user) && isset($user->role_id)))
+                            @if (isset($user) && $user->role_id !== $superAdmin->id)
+                                <div class="mb-3">
+                                    <label for="shop_id" class="form-label">Shop</label>
+                                    <select class="form-select mb-1 text-primary bg-transparent" name='shop_id'>
+                                        @foreach ($shops as $value)
+                                            <option value="{{ $value->id }}" class="text-dark"
+                                                {{ isset($user) ? ($value->id == $user->shop_id ? 'selected' : '') : '' }}>
+                                                {{ $value->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             @endif
-                        </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Confirm Password</label>
-                            <input type="password" name="password_confirmation" class="form-control bg-transparent "
-                                placeholder="Password">
-                        </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" name="password"
+                                    class="form-control bg-transparent {{ $errors->has('password') ? 'is-invalid' : '' }}"
+                                    placeholder="Password">
+                                @if ($errors->has('password'))
+                                    <div class="invalid-feedback mt-0">
+                                        {{ $errors->first('password') }}
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Confirm Password</label>
+                                <input type="password" name="password_confirmation" class="form-control bg-transparent "
+                                    placeholder="Password">
+                            </div>
+                        @endif
                     </div>
                     <div class="card-footer">
                         <div
@@ -90,9 +94,12 @@
                                     </a>
                                 </div>
                             @endif
-                            <button class="btn btn-danger ml-auto" id="remove" type="button">
-                                Remove
-                            </button>
+
+                            @if (isset($user) && $user->role_id !== $superAdmin->id)
+                                <button class="btn btn-danger ml-auto" id="remove" type="button">
+                                    Remove
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </form>

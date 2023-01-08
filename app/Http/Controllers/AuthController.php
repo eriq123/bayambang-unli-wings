@@ -68,15 +68,18 @@ class AuthController extends Controller
     {
         $roles = Role::all();
         $shops = Shop::all();
-        return view('super-admin.admin-edit', compact('roles', 'shops'));
+        $superAdmin = Role::where('name', 'Super Admin')->first();
+
+        return view('super-admin.admin-edit', compact('roles', 'shops', 'superAdmin'));
     }
 
     public function edit($id)
     {
         $user = User::find($id);
         $roles = Role::all();
+        $superAdmin = Role::where('name', 'Super Admin')->first();
         $shops = Shop::all();
-        return view('super-admin.admin-edit', compact('user', 'roles', 'shops'));
+        return view('super-admin.admin-edit', compact('user', 'roles', 'shops', 'superAdmin'));
     }
 
     public function update(Request $request)
@@ -84,15 +87,15 @@ class AuthController extends Controller
         $input = [
             'name' => 'required',
             'email' => 'required|email',
-            'shop_id' => 'required',
         ];
+
+        $role = Role::where('name', 'Admin')->first();
 
         if (!$request->id) {
             $input['password'] = 'required|confirmed';
         }
-        $request->validate($input);
 
-        $role = Role::where('name', 'Admin')->first();
+        $request->validate($input);
 
         if ($request->id) {
             $user = User::find($request->id);
@@ -102,10 +105,14 @@ class AuthController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+
         if (!$user->role_id) {
             $user->role_id = $role->id;
         }
-        $user->shop_id = $request->shop_id;
+
+        if ($request->shop_id) {
+            $user->shop_id = $request->shop_id;
+        }
 
         if ($request->password) {
             $user->password = bcrypt($request->password);
