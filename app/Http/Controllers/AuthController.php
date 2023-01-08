@@ -64,6 +64,13 @@ class AuthController extends Controller
         return redirect('/');
     }
 
+    public function add()
+    {
+        $roles = Role::all();
+        $shops = Shop::all();
+        return view('super-admin.admin-edit', compact('roles', 'shops'));
+    }
+
     public function edit($id)
     {
         $user = User::find($id);
@@ -74,19 +81,36 @@ class AuthController extends Controller
 
     public function update(Request $request)
     {
-        $request->validate([
-            'id' => 'required',
+        $input = [
             'name' => 'required',
             'email' => 'required|email',
-            'role_id' => 'required',
             'shop_id' => 'required',
-        ]);
+        ];
 
-        $user = User::find($request->id);
+        if (!$request->id) {
+            $input['password'] = 'required|confirmed';
+        }
+        $request->validate($input);
+
+        $role = Role::where('name', 'Admin')->first();
+
+        if ($request->id) {
+            $user = User::find($request->id);
+        } else {
+            $user = new User();
+        }
+
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->role_id = $request->role_id;
+        if (!$user->role_id) {
+            $user->role_id = $role->id;
+        }
         $user->shop_id = $request->shop_id;
+
+        if ($request->password) {
+            $user->password = bcrypt($request->password);
+        }
+
         $user->save();
 
         return redirect()->route('user.edit', ['id' => $user->id])->withSuccess('User updated successfully.');

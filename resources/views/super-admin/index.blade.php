@@ -4,6 +4,9 @@
             <div class="card-body">
                 <h1 class="mb-3">
                     Account management
+                    <a class="mx-3 btn btn-outline-primary" href="{{ route('user.add') }}">
+                        Add an admin
+                    </a>
                 </h1>
             </div>
         </div>
@@ -22,13 +25,13 @@
                         </a>
                     </h2>
                     <p class="mb-2">
-                        <b>Role:</b> {{ $admin->role->name }}
-                    </p>
-                    <p class="mb-2">
-                        <b>Shop:</b> {{ $admin->shop->name }}
-                    </p>
-                    <p class="mb-2">
                         <b>Email:</b> {{ $admin->email }}
+                    </p>
+                    <p class="mb-2">
+                        <b>Role:</b> {{ $admin->role->name ?? 'User' }}
+                    </p>
+                    <p class="mb-2">
+                        <b>Shop:</b> {{ $admin->shop->name ?? 'N/A' }}
                     </p>
                 </div>
             </div>

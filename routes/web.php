@@ -27,6 +27,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/sales/{slug?}', [SalesController::class, 'index'])->name('sales.index');
 
     Route::name('user.')->prefix('user')->controller(AuthController::class)->group(function () {
+        Route::get('/', 'add')->name('add');
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update', 'update')->name('update');
         Route::post('/destroy', 'destroy')->name('destroy');

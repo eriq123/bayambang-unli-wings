@@ -27,7 +27,7 @@ class HomeController extends Controller
             );
         }
 
-        $admins = User::where('role_id', $role->id)->with('shop')->get();
+        $admins = User::with(['shop', 'role'])->get();
         return view('index', compact('admins'));
     }
 }
