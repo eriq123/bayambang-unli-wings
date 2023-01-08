@@ -23,21 +23,25 @@ class OrderController extends Controller
         $statusInCart = Status::where('name', 'In Cart')->first();
 
         $order = Order::where('user_id', $user->id)
-            ->where('status_id', $statusInCart)
+            ->where('status_id', $statusInCart->id)
             ->with('products')
             ->first();
 
         $product = Product::find($request->product_id);
         $total = $request->quantity * $product->price;
 
-        if (!isset($order)) {
+
+        if (!$order) {
             $order = new Order();
             $order->user_id = $user->id;
             $order->shop_id = $user->shop_id;
             $order->status_id = $statusInCart->id;
             $order->total = 0;
             $order->save();
-            $order->with('products');
+        }
+
+        if ($order->products()->where('product_id', $product->id)->exists()) {
+            $this->removeFromCart($request);
         }
 
         $order->products()->attach($product->id, [
@@ -48,6 +52,7 @@ class OrderController extends Controller
 
         $order->total += $total;
         $order->save();
+        $order = Order::with('products')->find($order->id);
 
         return response()->json(compact('order'));
     }
@@ -63,7 +68,7 @@ class OrderController extends Controller
         $statusInCart = Status::where('name', 'In Cart')->first();
 
         $order = Order::where('user_id', $user->id)
-            ->where('status_id', $statusInCart)
+            ->where('status_id', $statusInCart->id)
             ->with('products')
             ->first();
 
@@ -71,6 +76,8 @@ class OrderController extends Controller
 
         $order->total -= $product->price * $product->quantity;
         $order->save();
+
+        $order = Order::with('products')->find($order->id);
 
         return response()->json(compact('order'));
     }
@@ -101,7 +108,9 @@ class OrderController extends Controller
         $statusToBeProcessed = $status->where('name', 'To Be Process')->first();
         $statusInCart = $status->where('name', 'In Cart')->first();
 
-        $order = Order::where('user_id', $user->id)->where('status_id', $statusInCart)->first();
+        $order = Order::where('user_id', $user->id)
+            ->where('status_id', $statusInCart->id)
+            ->first();
         $order->status_id = $statusToBeProcessed;
         $order->save();
 
@@ -114,7 +123,7 @@ class OrderController extends Controller
         $statusInCart = Status::where('name', 'In Cart')->first();
 
         $order = Order::where('user_id', $user->id)
-            ->whereIn('status_id', $statusInCart)
+            ->where('status_id', $statusInCart->id)
             ->with('products')
             ->get();
 
