@@ -11,7 +11,6 @@
 
                 <div class="row">
                     <div class="col-12 col-lg-6">
-                        <h5>Filter by :</h5>
                         <div class="btn-group" role="group">
                             @foreach ($rolesFilter as $value)
                                 <a href="/{{ $value }}"
