@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\api\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
