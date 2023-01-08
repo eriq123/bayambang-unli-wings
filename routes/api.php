@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::name('order.')->controller(OrderController::class)->group(function () {
-    Route::prefix('order')->group(function () {
-        Route::post('/addToCart', 'addToCart');
-    });
+    Route::post('/addToCart', 'addToCart');
+    Route::post('/view/orders', 'viewOrders');
 });
