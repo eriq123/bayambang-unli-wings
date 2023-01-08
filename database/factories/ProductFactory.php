@@ -22,6 +22,7 @@ class ProductFactory extends Factory
             'title' => $this->faker->sentence(2),
             'description' => $this->faker->paragraph(1),
             'shop_id' => $this->faker->randomElement($intArrShopIds),
+            'price' => $this->faker->numberBetween(100, 1000),
         ];
     }
 }

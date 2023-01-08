@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\Status;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Faker\Generator as Faker;
 
@@ -18,20 +16,32 @@ class OrderSeeder extends Seeder
      */
     public function run(Faker $faker)
     {
-        $initialStatusId = Status::where('name', (new StatusSeeder)->getStatus()[0])->first()->id;
-
-        Order::factory(100)->create([
-            'status_id' => $initialStatusId,
+        Order::factory(10000)->create([
+            'total' => 0,
         ])
             ->each(function ($order) use ($faker) {
+                $orderTotal = 0;
+
                 foreach (range(1, rand(2, 10)) as $item) {
+                    $quantity = $faker->numberBetween(1, 10);
+                    $productId = $faker->randomElement(Product::pluck('id'));
+                    $product = Product::find($productId);
+                    $total = $quantity * $product->price;
+
                     $order->products()->attach(
-                        $faker->randomElement(Product::pluck('id')),
+                        $productId,
                         [
-                            'quantity' => $faker->numberBetween(1, 20)
+                            'quantity' => $quantity,
+                            'price' => $product->price,
+                            'total' => $total
                         ]
                     );
+                    $orderTotal += $total;
                 };
+
+                $order = Order::find($order->id);
+                $order->total = $orderTotal;
+                $order->save();
             });
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Shop;
 use App\Models\Status;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,9 +23,15 @@ class OrderFactory extends Factory
     {
         $intArrCustomerIds = User::whereNull('role_id')->pluck('id');
         $intArrShopIds = Shop::all()->pluck('id');
+        $randomTimeStamp = Carbon::today()->subDays(rand(0, 365));
+        $statusIds = Status::pluck('id');
+
         return [
             'user_id' => $this->faker->randomElement($intArrCustomerIds),
             'shop_id' => $this->faker->randomElement($intArrShopIds),
+            'status_id' => $this->faker->randomElement($statusIds),
+            'updated_at' => $randomTimeStamp,
+            'created_at' => $randomTimeStamp,
         ];
     }
 }

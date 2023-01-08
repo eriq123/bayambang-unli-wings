@@ -20,8 +20,9 @@ class OrderController extends Controller
             ->get();
 
         $status = Status::all();
+        $salesFilter = (new SalesController)->salesFilter;
 
-        return view('index', compact('orders', 'status'));
+        return view('index', compact('orders', 'status', 'salesFilter'));
     }
 
     public function update(Request $request, $id)
