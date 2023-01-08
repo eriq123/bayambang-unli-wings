@@ -28,10 +28,8 @@ class SalesController extends Controller
         $deliveredId = Status::where('name', 'Delivered')->first()->id;
         $slugKey = $this->getSlugKey($slug);
 
-        return
-            Order::where('shop_id', Auth::user()->shop_id)
+        return Order::where('shop_id', Auth::user()->shop_id)
             ->where('status_id', $deliveredId)
-            ->where('isActive', 1)
             ->orderBy('updated_at')
             ->get()
             ->groupBy(function ($value) use ($slugKey) {
@@ -77,12 +75,17 @@ class SalesController extends Controller
         return $reportCollection->values()->all();
     }
 
+    public function getStatusExceptInCart()
+    {
+        return Status::where('name', '!=', 'In Cart')->get();
+    }
+
     public function index($slug = null)
     {
         if ($slug === null) return redirect(route('sales.index', ['slug' => 'daily']));
 
         $salesFilter = $this->salesFilter;
-        $status = Status::all();
+        $status = $this->getStatusExceptInCart();
         $dataPoints = $this->getDataPoints($slug, $this->getSales($slug));
 
         return view('admin.sales', compact('salesFilter', 'status', 'dataPoints'));

@@ -19,6 +19,7 @@ class StatusSeeder extends Seeder
         'To be process',
         'On the way',
         'Delivered',
+        'In Cart',
     ];
 
     public function getStatus()

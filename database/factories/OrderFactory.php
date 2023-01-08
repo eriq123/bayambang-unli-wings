@@ -23,13 +23,12 @@ class OrderFactory extends Factory
     {
         $intArrCustomerIds = User::whereNull('role_id')->pluck('id');
         $intArrShopIds = Shop::all()->pluck('id');
-        $statusIds = Status::pluck('id');
+        $statusIds = Status::where('name', '!=', 'In Cart')->pluck('id');
 
         return [
             'user_id' => $this->faker->randomElement($intArrCustomerIds),
             'shop_id' => $this->faker->randomElement($intArrShopIds),
             'status_id' => $this->faker->randomElement($statusIds),
-            'isActive' => 1,
         ];
     }
 }
