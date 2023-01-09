@@ -7,7 +7,7 @@
                 <div class="card-body">
 
                     <h2 class="card-title d-flex justify-content-between align-items-top">
-                        #{{ $order->id }}
+                        #{{ $order->uuid }}
 
                         <form action="{{ route('order.destroy', $order->id) }}" method="POST">
                             @csrf

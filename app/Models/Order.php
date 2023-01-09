@@ -9,6 +9,17 @@ class Order extends Model
 {
     use HasFactory;
 
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $getSameShopPreviousOrder = Order::where('shop_id', $model->shop_id)->orderByDesc('id')->first();
+            $model->uuid = isset($getSameShopPreviousOrder) ? $getSameShopPreviousOrder->uuid + 1 : 1;
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
