@@ -70,6 +70,10 @@ class ProductController extends Controller
 
         $product = Product::findOrFail($request->id);
         $product->delete();
+
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
         return redirect()->route('product.index');
     }
 }
