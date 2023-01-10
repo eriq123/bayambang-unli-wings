@@ -72,7 +72,7 @@
                                 </div>
                             @endif
                         </div>
-                        @if ($product->image)
+                        @if (isset($product) && $product->image)
                             <div class="mb-3">
                                 <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" />
                             </div>
