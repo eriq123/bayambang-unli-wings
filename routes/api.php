@@ -29,10 +29,15 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::controller(OrderController::class)->group(function () {
-        Route::post('/addToCart', 'addToCart');
-        Route::post('/removeFromCart', 'removeFromCart');
-        Route::get('/viewCart', 'viewCart');
-        Route::post('/view/orders', 'viewOrders');
-        Route::post('/checkout', 'checkout');
+        Route::prefix('cart')->group(function () {
+            Route::post('/add', 'addToCart');
+            Route::post('/remove', 'removeFromCart');
+            Route::get('/view', 'viewCart');
+            Route::post('/checkout', 'checkout');
+        });
+
+        Route::prefix('order')->group(function () {
+            Route::post('/view', 'viewOrders');
+        });
     });
 });
