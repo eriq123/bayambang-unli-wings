@@ -42,21 +42,25 @@ class HomeController extends Controller
 
     public function superAdminHome($slug = null)
     {
+        if ($slug === null) {
+            return redirect(
+                route('superAdminHome', [
+                    'slug' => 'admins'
+                ])
+            );
+        }
+
         $rolesFilter = [
             'admins',
             'users',
         ];
-        if ($slug === null) return redirect('/admins');
-        $users = $this->getUserByType($slug);
-        return view('index', compact('users', 'rolesFilter'));
-    }
 
-    private function getUserByType($type)
-    {
-        $user = User::with(['shop', 'role'])->whereNull('role_id')->get();
-        if ($type == 'admins') {
-            $user = User::with(['shop', 'role'])->whereNotNull('role_id')->get();
+        $users = User::with(['shop', 'role'])->whereNull('role_id')->get();
+
+        if ($slug == 'admins') {
+            $users = User::with(['shop', 'role'])->whereNotNull('role_id')->get();
         }
-        return $user;
+
+        return view('index', compact('users', 'rolesFilter'));
     }
 }
