@@ -13,7 +13,7 @@
                     <div class="col-12 col-lg-6">
                         <div class="btn-group" role="group">
                             @foreach ($rolesFilter as $value)
-                                <a href="/{{ $value }}"
+                                <a href="{{ route('superAdminHome', ['slug' => $value]) }}"
                                     class="btn {{ Request::route('slug') == $value ? 'btn-primary text-dark' : 'btn-outline-primary' }}">
                                     {{ Str::ucfirst($value) }}
                                 </a>

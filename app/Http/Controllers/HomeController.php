@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function index($slug = null)
+    public function index()
     {
         $user = Auth::user();
-        $role = Role::where('name', 'Admin')->first();
+        $role = Role::all();
+        $roleAdmin = $role->where('name', 'Admin')->first();
+        $roleSuperAdmin = $role->where('name', 'Super Admin')->first();
 
-        if ($user->role_id == $role->id) {
+        if ($user->role_id == $roleAdmin->id) {
             $status = Status::find(1);
             $shop = Shop::find($user->shop_id);
 
@@ -27,13 +29,25 @@ class HomeController extends Controller
             );
         }
 
+        if ($user->role_id == $roleSuperAdmin->id) {
+            return redirect(
+                route('superAdminHome', [
+                    'slug' => 'admins'
+                ])
+            );
+        }
+
+        return abort(401);
+    }
+
+    public function superAdminHome($slug = null)
+    {
         $rolesFilter = [
             'admins',
             'users',
         ];
         if ($slug === null) return redirect('/admins');
         $users = $this->getUserByType($slug);
-
         return view('index', compact('users', 'rolesFilter'));
     }
 
