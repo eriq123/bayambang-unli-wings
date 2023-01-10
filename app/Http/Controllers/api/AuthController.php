@@ -121,6 +121,33 @@ class AuthController extends Controller
         return $user->createToken($request->email)->plainTextToken;
     }
 
+    /**
+     * @OA\Get(
+     *      path="/user",
+     *      operationId="getUser",
+     *      tags={"User"},
+     *      security={ {"sanctum": {} }},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="user", type="object", description="User information."),
+     *          ),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function getUser(Request $request)
     {
         return response()->json($request->user());
