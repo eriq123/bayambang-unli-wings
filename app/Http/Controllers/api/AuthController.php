@@ -10,6 +10,42 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * @OA\Post(
+     *      path="/register",
+     *      operationId="registerUser",
+     *      tags={"Authentication"},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={
+     *                  "name",
+     *                  "email",
+     *                  "password"
+     *              },
+     *              @OA\Property(property="name", type="string", format="text", example="John Doe"),
+     *              @OA\Property(property="email", type="string", format="email", example="johnDoe@mail.com"),
+     *              @OA\Property(property="password", type="string", format="password", example="password123"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function register(Request $request)
     {
         $request->validate([
@@ -30,10 +66,8 @@ class AuthController extends Controller
     /**
      * @OA\Post(
      *      path="/login",
-     *      operationId="login",
+     *      operationId="loginUser",
      *      tags={"Authentication"},
-     *      summary="Login",
-     *      description="Login",
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
