@@ -27,6 +27,28 @@ class AuthController extends Controller
         return $user->createToken($request->email)->plainTextToken;
     }
 
+    /**
+     * @OA\Post(
+     *      path="/login",
+     *      operationId="login",
+     *      tags={"Authentication"},
+     *      summary="Login",
+     *      description="Login",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *     )
+     */
+
     public function login(Request $request)
     {
         $request->validate([
