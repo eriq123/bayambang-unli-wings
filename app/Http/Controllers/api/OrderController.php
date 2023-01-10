@@ -93,6 +93,42 @@ class OrderController extends Controller
         return response()->json(compact('order'));
     }
 
+    /**
+     * @OA\Post(
+     *      path="/cart/remove",
+     *      operationId="removeFromCart",
+     *      tags={"Cart"},
+     *      security={ {"sanctum": {} }},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={
+     *                  "product_id",
+     *              },
+     *              @OA\Property(property="product_id", type="integer", format="integer", example="1"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="order", type="object", description="Order object."),
+     *          ),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function removeFromCart(Request $request)
     {
         $request->validate([
@@ -114,10 +150,41 @@ class OrderController extends Controller
         $order->save();
 
         $order = Order::with('products')->find($order->id);
-
         return response()->json(compact('order'));
     }
 
+    /**
+     * @OA\Post(
+     *      path="/orders/view",
+     *      operationId="viewOrders",
+     *      tags={"Order"},
+     *      security={ {"sanctum": {} }},
+     *      @OA\RequestBody(
+     *          @OA\JsonContent(
+     *              @OA\Property(property="delivered", type="boolean", format="boolean", example="true"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="orders", type="object", description="Order object."),
+     *          ),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function viewOrders(Request $request)
     {
         $user = $request->user();
@@ -205,6 +272,33 @@ class OrderController extends Controller
         return response()->json(compact('orders'));
     }
 
+    /**
+     * @OA\Get(
+     *      path="/cart/view",
+     *      operationId="viewCart",
+     *      tags={"Cart"},
+     *      security={ {"sanctum": {} }},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="order", type="object", description="Order object."),
+     *          ),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function viewCart(Request $request)
     {
         $user = $request->user();
