@@ -24,7 +24,11 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::controller(AuthController::class)->group(function () {
-        Route::get('/user', 'getUser');
+        Route::prefix('user')->group(function () {
+            Route::get('/', 'getUser');
+            Route::get('/address', 'getAddress');
+            Route::post('/address', 'updateAddress');
+        });
         Route::post('/logout', 'logout');
     });
 

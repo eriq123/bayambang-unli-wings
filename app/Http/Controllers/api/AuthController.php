@@ -131,7 +131,7 @@ class AuthController extends Controller
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(
-     *              @OA\Property(property="user", type="object", description="User information."),
+     *              @OA\Property(property="user", type="object", description="User object."),
      *          ),
      *       ),
      *      @OA\Response(
@@ -153,6 +153,33 @@ class AuthController extends Controller
         return response()->json($request->user());
     }
 
+    /**
+     * @OA\Post(
+     *      path="/logout",
+     *      operationId="logoutUser",
+     *      tags={"Authentication"},
+     *      security={ {"sanctum": {} }},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="user", type="object", description="User object."),
+     *          ),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function logout(Request $request)
     {
         $user = $request->user();
@@ -161,6 +188,42 @@ class AuthController extends Controller
         return response()->json($user);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/user/address",
+     *      operationId="updateUserAddress",
+     *      tags={"User"},
+     *      security={ {"sanctum": {} }},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={
+     *                  "address",
+     *              },
+     *              @OA\Property(property="address", type="string", format="text", example="7002 Roscoe Mountains Suite 763 Waltermouth, TN 99169"),
+     *          ),
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="user", type="object", description="User object."),
+     *          ),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function updateAddress(Request $request)
     {
         $request->validate([
@@ -174,6 +237,33 @@ class AuthController extends Controller
         return response()->json(compact('user'));
     }
 
+    /**
+     * @OA\Get(
+     *      path="/user/address",
+     *      operationId="getUserAddress",
+     *      tags={"User"},
+     *      security={ {"sanctum": {} }},
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="address", type="string", description="User address."),
+     *          ),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function getAddress(Request $request)
     {
         return response()->json([
