@@ -29,8 +29,11 @@ class AuthController extends Controller
      *          ),
      *      ),
      *      @OA\Response(
-     *          response=201,
+     *          response=200,
      *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="token", type="string", description="Bearer token"),
+     *          ),
      *       ),
      *      @OA\Response(
      *          response=400,
@@ -68,10 +71,28 @@ class AuthController extends Controller
      *      path="/login",
      *      operationId="loginUser",
      *      tags={"Authentication"},
+     *      @OA\RequestBody(
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={
+     *                  "email",
+     *                  "password"
+     *              },
+     *              @OA\Property(property="email", type="string", format="email", example="johnDoe@mail.com"),
+     *              @OA\Property(property="password", type="string", format="password", example="password123"),
+     *          ),
+     *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="token", type="string", description="Bearer token"),
+     *          ),
      *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad Request"
+     *      ),
      *      @OA\Response(
      *          response=401,
      *          description="Unauthenticated",
@@ -80,9 +101,8 @@ class AuthController extends Controller
      *          response=403,
      *          description="Forbidden"
      *      )
-     *     )
+     * )
      */
-
     public function login(Request $request)
     {
         $request->validate([
