@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -235,7 +236,7 @@ class OrderController extends Controller
     {
         $user = $request->user();
         $status = Status::all();
-        $statusToBeProcessed = $status->where('name', 'To Be Process')->first();
+        $statusToBeProcessed = $status->where('name', 'To be process')->first();
         $statusInCart = $status->where('name', 'In Cart')->first();
 
         $cartOrder = Order::where('user_id', $user->id)
@@ -243,32 +244,32 @@ class OrderController extends Controller
             ->first();
 
         $productsByShop = $cartOrder->products->groupBy('shop_id');
-
-        foreach ($productsByShop as $k => $shop) {
-            $newOrder = new Order();
-            $newOrder->user_id = $user->id;
-            $newOrder->shop_id = $shop[0]->shop_id;
-            $newOrder->status_id = $statusToBeProcessed->id;
-            $newOrder->total = 0;
-            $newOrder->save();
-
-            foreach ($shop as $product) {
-                $newOrder->products()->attach($product->id, [
-                    'shop_id' => $product->shop_id,
-                    'quantity' => $request->quantity,
-                    'price' => $product->price,
-                    'total' => $product->total
-                ]);
-                $newOrder->total += $product->total;
+        DB::transaction(function () use ($productsByShop, $user, $statusToBeProcessed, $cartOrder) {
+            foreach ($productsByShop as $k => $shop) {
+                $newOrder = new Order();
+                $newOrder->user_id = $user->id;
+                $newOrder->shop_id = $shop[0]->shop_id;
+                $newOrder->status_id = $statusToBeProcessed->id;
+                $newOrder->total = 0;
                 $newOrder->save();
 
-                $cartOrder->products()->detach($product->id);
-                $cartOrder->total -= $product->total;
-                $cartOrder->save();
-            }
-        }
+                foreach ($shop as $product) {
+                    $newOrder->products()->attach($product->id, [
+                        'quantity' => $product->pivot->quantity,
+                        'price' => $product->pivot->price,
+                        'total' => $product->pivot->total
+                    ]);
+                    $newOrder->total += $product->total;
+                    $newOrder->save();
 
-        $orders = Order::where('user_id', $user->id)->get();
+                    $cartOrder->products()->detach($product->id);
+                    $cartOrder->total -= $product->total;
+                    $cartOrder->save();
+                }
+            }
+        });
+
+        $orders = Order::with('products')->where('user_id', $user->id)->get();
         return response()->json(compact('orders'));
     }
 
