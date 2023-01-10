@@ -14,6 +14,8 @@ class OrderController extends Controller
         $status = Status::where('slug', $statusSlug)->first();
         $shop = Shop::where('slug', $shopSlug)->first();
 
+        if (!isset($status) || !isset($shop)) return redirect('/');
+
         $orders = Order::with(['products', 'status', 'user', 'shop'])
             ->where('shop_id', $shop->id)
             ->where('status_id', $status->id)
