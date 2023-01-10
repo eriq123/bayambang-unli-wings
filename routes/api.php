@@ -34,13 +34,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::controller(OrderController::class)->group(function () {
         Route::prefix('cart')->group(function () {
+            Route::get('/view', 'viewCart');
             Route::post('/add', 'addToCart');
             Route::post('/remove', 'removeFromCart');
-            Route::get('/view', 'viewCart');
             Route::post('/checkout', 'checkout');
         });
 
-        Route::prefix('order')->group(function () {
+        Route::prefix('orders')->group(function () {
             Route::post('/view', 'viewOrders');
         });
     });
