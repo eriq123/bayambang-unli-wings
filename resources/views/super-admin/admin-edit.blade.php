@@ -48,7 +48,7 @@
                         </div>
 
                         @if (!isset($user) || (isset($user) && isset($user->role_id)))
-                            @if (isset($user) && $user->role_id !== $superAdmin->id)
+                            @if (!isset($user) || (isset($user) && $user->role_id !== $superAdmin->id))
                                 <div class="mb-3">
                                     <label for="shop_id" class="form-label">Shop</label>
                                     <select class="form-select mb-1 text-primary bg-transparent" name='shop_id'>
